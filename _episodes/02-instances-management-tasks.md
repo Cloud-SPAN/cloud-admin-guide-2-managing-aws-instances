@@ -19,7 +19,7 @@ keypoints:
 > ## Prerequisites
 > To complete this episode you will need:
 > - to have configured your Linux enviroment as described either:
->   - in [Configure Your Linux Machine Environment](https://cloud-span.github.io/cloud-admin-guide-1-setting-work-environments/03-configure-linux-machine-environmen) (third episode, first lesson) or
+>   - in [Configure Your Linux Machine Environment](https://cloud-span.github.io/cloud-admin-guide-1-setting-work-environments/03-configure-linux-machine-environment) (third episode, first lesson) or
 >   - in [Configure Your AWS CloudShell Environment](https://cloud-span.github.io/cloud-admin-guide-1-setting-work-environments/04-configure-aws-cloudshell-environment) (fourth episode, first lesson)
 > - to have configured instances internet access as described in [Configure Instances Internet Access](../01-configure-instances-internet-access) (first episode, this lesson). 
 > - your base domain name.
