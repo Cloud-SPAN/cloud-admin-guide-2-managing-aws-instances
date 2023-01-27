@@ -462,7 +462,7 @@ Success starting instance: instance03
 ~~~
 {: .output}
 
-Once you run `csinstances_start.sh`, the instances state in the AWS Console will change from **Stopped** to **Running**, and will remain so until you run another script that changes the state of the instances.
+Once you run `csinstances_start.sh`, the instances state in the AWS Console will change from **Stopped** to **Pending** (momentarily), and then to **Running** and will remain so until you run another script that changes the instances state.
 
 ### Deleting the instances and all their resources once the workshop is over
 ~~~
@@ -609,7 +609,7 @@ Those messages are related to accessing an instance with `ssh`. We have come acr
 
 **The first scenario** is shown below. It has to do with the SSH server in the instance not yet being ready to accept any login request, and hence the client (the script `aws_instances_configure.sh` which is invoked last by `csinstances_create.sh`) receives an unsuccessful response and displays either the message "Connection timed out" or "Connections refused", or both. This situation is "normal" because we know the instance has just been launched. It's only a matter of waiting for the SSH server to be ready.
 
-![Screenshot of Linux terminal showing the last part of the output of running the command csinstances_create.sh; that part corresponds to the configuration step of each instance and screenshot shows the "Connection timed out" and "Connection refused" messages circled that may arise during the configuration step.](../fig/02-instances-management/12-results-of-running-csinstance_create.sh-configuring-instance2.png){: width="900px"}
+![Screenshot of Linux terminal showing the last part of the output of running the command csinstances_create.sh; that part corresponds to the configuration step of each instance and the screenshot shows the "Connection timed out" and "Connection refused" messages circled that may arise during the configuration step.](../fig/02-instances-management/12-results-of-running-csinstance_create.sh-configuring-instance2.png){: width="900px"}
 
 Note in the screenshot the message in brown "**Please wait for SSH server (you may see a few 'Connection timed out/Connection refused' messages)**", and the `ssh`-related message in white just below "**ssh -o ConnectTimeout=5 -o StrictHostKeyChecking=no -i courses/...**". The script `aws_instances_configure.sh` prints those messages and then gets into a loop to repeatedly issue that `ssh` command until it is successful.  In the screenshot, three issues of that `ssh` command were unsuccessful and the message "**ssh: connect to host instance01... port 22: Connection refused**" was displayed three times. Once that `ssh` command is successful, `aws_instances_configure.sh` proceedes to issue the `ssh` commands that configure the instance. That is, the sole purpose of the `ssh` command that is issued within the loop is to ensure the SSH server in the instance is ready.
 

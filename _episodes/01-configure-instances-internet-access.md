@@ -68,7 +68,7 @@ On the page that appears, "Choose a domain name", you are going to:
 ![](../fig/01-instances-internet-access/03-enter-domain-name-choose-TLD-check-availability-add2cart-continue.png){: width="900px"}
 
 ### Enter the contact details for your domain
-You will now be presented with the page "Contact Details for Your 1 Domain". Make as follows in this page:
+You will now be presented with the page "Contact Details for Your 1 Domain". Do as follows in this page:
 
 - select **Yes** for "*My Registrant, Administrative and Technical Contacts are all the same*".
 - select **Person** for "*Contact Type*".

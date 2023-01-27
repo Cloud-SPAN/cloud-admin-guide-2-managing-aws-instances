@@ -43,16 +43,20 @@ Episode 1 will guide you to configure internet access for the instances you will
  <!-- this reference is to a section in a another page file is right -- don't delete [Create a Base Domain Name](01-configure-instances-internet-access#1-create-a-base-domain-name). -->
 ### Instances Management Tasks Using the Scripts
 
-Episode 2 is the guide for using the Scripts in creating and managing multiple instances for a course/workshop. This episode shows:
+Episode 2 is the guide for using the Scripts to create and manage multiple instances for a course/workshop. The episode shows:
 - how to configure the Scripts with the names of the instances to create and the AWS resources to use (base domain name, AMI template, etc.).
 - how to organise the Scripts configuration files for multiple courses. 
 - how to use/run the Scripts and manage unforseen instances management requests such as cancellations by workshop participants.
 - some troubleshooting
 
-### AMIs Management Tasks
+### AMIs Management
 
-In construction.
+Episode 3 is about managing Amazon Machine Images (AMIs). AWS instances are copies (instances) of an AMI. When you use the Scripts to create AWS instances for a course, you must specify from which AMI to make the copies.
+
+You need to create a new AMI if the software or data used in a course change, but there are other reasons that may require creating a new AMI.
+
+The episode presents the management of AMIs that we do as part of managing AWS instances with the Scripts.
 
 ### The Scripts Design and Management Tasks
 
-In construction.
+In construction. 
