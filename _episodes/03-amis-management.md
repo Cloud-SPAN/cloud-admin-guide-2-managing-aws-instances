@@ -34,18 +34,18 @@ In the last episode we used the Scripts to create multiple AWS instances through
 This episode presents the management of AMIs that we do as part of managing AWS instances with the Scripts. The first 3 sections cover the **mechanical part** hands-on, steps 1 and 3 above, which are rather simple once you have gone through the tasks involved. The subsequent sections cover our approach to and experience in **configuring** instances to-become-AMIs. You won't be doing any such configuring. However, knowing the configuring we have done and some scripts we developed to facilitate common configuring tasks will help you not to start from scratch.
 
 > ## Sections
-> 1. **[Create an Instance to-become-AMI]().**\
+> 1. **[Create an Instance to-become-AMI](#1-create-an-instance-to-become-ami).**\
   In this section you are going to create an instance to-become-AMI using the file-directory structure we use to manage such instances. 
 >
-> 2. **[Create an AMI and Make It Public in the AWS Console]().**
+> 2. **[Create an AMI and Make It Public in the AWS Console](#2-create-an-ami-and-make-it-public-in-the-aws-console).**
 >
-> 3. **[Delete an AMI in the AWS Console]().**\
+> 3. **[Delete an AMI in the AWS Console](#3-delete-an-ami-in-the-aws-console).**\
   We use the AWS Console to create an AMI, to make it public or private, and to delete it. Sections 2 and 3 will guide you perform those tasks with the AWS Console as we do --- in case you are wondering about **scripting AMIs management**, yes AMIs can also be managed (created, deleted, etc.) with the AWS CLI, and hence a set of scripts (like the Scripts that manage instances) could be developed to manage AMIs. We haven't had the need to do so, however: the AMI tasks we need to perform are rather easy in the AWS Console and only rarely needed in the Cloud-SPAN project, so far.
 > 
-> 4. **[Instances Management for Courses, AMIs and Tests]()**.\
+> 4. **[Instances Management for Courses, AMIs and Tests](#4-instances-management-for-courses-amis-and-tests)**.\
 > Section 1 introduces the file-directory structure we use to manage instancest to-become-AMIs. This section describes other AMI management practices we follow.
 > 
-> 5. **[When and How to "Create an AMI": Configure an Instance to-become-AMI]()**.\
+> 5. **[When and How to "Create an AMI": Configure an Instance to-become-AMI](#5-when-and-how-to-create-an-ami-configure-an-instance-to-become-ami)**.\
 > Based on our experience in configuring instances to-become-AMIs within the Cloud-SPAN project, this section presents our viewpoint as to when and how to create an AMI.
 {: .callout}
 

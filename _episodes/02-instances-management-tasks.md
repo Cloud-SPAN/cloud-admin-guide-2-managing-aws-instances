@@ -309,7 +309,7 @@ $ csinstances_create.sh courses/instances-management/inputs/instancesNames.txt
 ~~~
 {: .bash}
 
-Once you press Enter the output you will see in your terminal will be like the one in the screenshot below. The script `csinstances_create.sh` will display a message to the terminal as it invokes each of the scripts that creates/configures AWS resources. Each script that creates/configures AWS resources will first display in cyan colour what it does ("Creating login keys" for example); it will then display to the terminal **part of** the results of creating/configuring the resources, and save to files in the `outputs` directory all of those results. 
+Once you press Enter the output you will see in your terminal will be like the one in the screenshot below. The script `csinstances_create.sh` will display a message to the terminal as it invokes each of the scripts that creates/configures AWS resources. Each of these scripts will first display in cyan colour what it does ("Creating login keys" for example); it will then display to the terminal **part of** the results of creating/configuring the resources, and save to files in the `outputs` directory all of those results. 
 
 ![Screenshot of Linux terminal showing the terminal prompt, the run of the command "csinstances_create.sh courses/instances-management/inputs/instancesNames.txt", and part of the output results of that command.](../fig/02-instances-management/02-results-of-running-csinstance_create.sh.png){: width="900px"}
 
