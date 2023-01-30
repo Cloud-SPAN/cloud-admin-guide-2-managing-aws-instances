@@ -11,7 +11,7 @@ objectives:
 - Configure the subnet to which instances will be connected and hence accessible.
 keypoints:
 - If you are using a **personal account**, the base domain name you created will incur some minor cost. 
-- If you are using a **institutional account**, the base domain name nay need to be created by your IT department, and you may need to use a subnet managed by your IT department.
+- If you are using a **institutional account**, the base domain name may need to be created by your IT department, and you may need to use a subnet managed by your IT department.
 ---
 
 > ## Prerequisites
