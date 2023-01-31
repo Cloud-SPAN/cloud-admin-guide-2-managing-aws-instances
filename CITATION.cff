@@ -20,6 +20,6 @@ authors:
   orcid: "https://orcid.org/0000-0002-1358-8275"
 title: "Cloud-SPAN Automated Management of AWS Instances: Managing instances"
 version: 1.0.0
-doi: tbc
+doi: 10.5281/zenodo.7589306
 date-released: 2023-31-1
 url: "https://cloud-span.github.io/cloud-admin-guide-2-managing-aws-instances/"
