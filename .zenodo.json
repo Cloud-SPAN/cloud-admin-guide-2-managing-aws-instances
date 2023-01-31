@@ -1,0 +1,68 @@
+{
+    "license": "CC-BY-4.0", 
+    "contributors": [
+        {
+            "orcid": "0000-0002-4914-5150", 
+            "affiliation": "University of York", 
+            "type": "RelatedPerson", 
+            "name": "Barnes, Emma"
+        }, 
+        {
+            "affiliation": "University of York", 
+            "type": "ProjectManager", 
+            "name": "Dowsland, Sarah"
+        }
+    ], 
+    "title": "Cloud-SPAN Cloud Admin Guide: Managing AWS Instances", 
+    "language": "eng", 
+    "keywords": [
+        "training materials", 
+        "elastic cloud compute", 
+        "educational resources"
+    ], 
+    "grants": [
+        {
+            "id": "10.13039/100014013::MR/V038680/1"
+        }
+    ], 
+    "upload_type": "lesson", 
+    "version": "v1.0.0", 
+    "communities": [
+        {
+            "identifier": "cloud-span"
+        }
+    ], 
+    "publication_date": "2022-05-19", 
+    "creators": [
+        {
+            "orcid": "0000-0002-1358-8275", 
+            "affiliation": "University of York", 
+            "name": "Rand, Emma"
+        }, 
+        {
+            "orcid": "0000-0001-9447-7421", 
+            "affiliation": "University of York", 
+            "name": "Chong, James"
+        }, 
+        {
+            "affiliation": "University of York", 
+            "name": "Buenabad-Chavez, Jorge"
+        }, 
+        {
+            "orcid": "0000-0001-9548-3110", 
+            "affiliation": "University of York", 
+            "name": "Cansdale, Annabel"
+        }, 
+        {
+            "orcid": "0000-0001-8332-7196", 
+            "affiliation": "University of York", 
+            "name": "Forrester, Sarah"
+        }, 
+        {
+            "orcid": "0000-0003-4800-3422", 
+            "affiliation": "University of York", 
+            "name": "Greeves, Evelyn"
+        }
+    ], 
+    "access_right": "open"
+}
