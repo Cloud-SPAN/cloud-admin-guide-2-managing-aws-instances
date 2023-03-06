@@ -63,11 +63,11 @@ aws_domainNames_delete.sh             aws_instances_launch.sh     csinstances_de
 aws_elasticIPs_allocate.sh            aws_instances_terminate.sh  csinstances_start.sh
 aws_elasticIPs_associate2instance.sh  aws_loginKeyPair_create.sh  csinstances_stop.sh
 aws_elasticIPs_deallocate.sh          aws_loginKeyPair_delete.sh
-aws_elasticIPs_disassociate.sh        colours_functions.sh
+aws_elasticIPs_disassociate.sh        colours_msg_functions.sh
 ~~~
 {: .output}
 
-The four scripts `csinstances_*.sh` (on the right) are to be run by the **user of the Scripts**, the person in charge of creating, stopping, starting and deleting AWS instances for a workshop/course. The scripts `aws_*.sh` are invoked by the scripts `csinstances_create.sh` or `csinstances_delete.sh` to either create or delete the corresponding domain names, IP addresses, and login keys. The script `colour_functions.sh` provides (is "sourced" by) the other scripts with text colouring functions for the results of the other scripts to be easier to read.
+The four scripts `csinstances_*.sh` (on the right) are to be run by the **user of the Scripts**, the person in charge of creating, stopping, starting and deleting AWS instances for a workshop/course. The scripts `aws_*.sh` are invoked by the scripts `csinstances_create.sh` or `csinstances_delete.sh` to either create or delete the corresponding domain names, IP addresses, and login keys. The file `colours_msg_functions.sh` provides (is "sourced" by) the other scripts with text colouring and message functions for the results of the other scripts to be easier to read.
 
 ### Configuring the directory structure
 
@@ -233,7 +233,7 @@ You will normally use your preferred editor to create those files. However, to s
 
 The files we have prepared are in the directory where you downloaded the Scripts to install them (in lesson 1, episode 3 or 4).
 
-Copy them to your course `inputs` directory as follows (note that you must to be in your home directory):
+Copy them to your course `inputs` directory as follows (note that you must be in your home directory):
 ~~~
 csuser@cloud-admin-instance:~
 $ cp _tmp_cloudspan_aws/instances-management-course-data/inputs/* courses/instances-management/inputs

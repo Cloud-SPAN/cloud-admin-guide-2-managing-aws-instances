@@ -99,7 +99,7 @@ $ csinstances_create.sh ami-instance-configs/ami01-theScripts-course/inputs/inst
 The instance should now be running. 
 
 # 2. Create an AMI and Make It Public in the AWS Console
-This section shows you how to use the AWS Console to create an AMI from the instance you created above and how make the AMI public (usable by other AWS users).
+This section shows you how to use the AWS Console to create an AMI from the instance you created above and how to make the AMI public (usable by other AWS users).
 
 As mentioned in the introduction, you will normally create an AMI in the AWS Console after you have both created and **configured** an AWS instance from which to create the AMI. We are **skipping** the configuration step. You are not compelled to configure an instance before creating an AMI from it. You can create an AMI any time you see it necessary/useful, including learning how to do it.
 
