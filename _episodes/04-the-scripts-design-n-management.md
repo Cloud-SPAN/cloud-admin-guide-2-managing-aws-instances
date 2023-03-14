@@ -34,12 +34,12 @@ This section describes the organisation and workings of the Scripts. After you r
 
 Let's recall the Scripts names:
 ~~~
-aws_domainNames_create.sh             aws_instances_configure.sh  csinstances_create.sh
-aws_domainNames_delete.sh             aws_instances_launch.sh     csinstances_delete.sh
-aws_elasticIPs_allocate.sh            aws_instances_terminate.sh  csinstances_start.sh
-aws_elasticIPs_associate2instance.sh  aws_loginKeyPair_create.sh  csinstances_stop.sh
-aws_elasticIPs_deallocate.sh          aws_loginKeyPair_delete.sh
-aws_elasticIPs_disassociate.sh        colours_functions.sh
+aws_domainNames_create.sh        aws_instances_configure.sh  csinstances_create.sh
+aws_domainNames_delete.sh        aws_instances_launch.sh     csinstances_delete.sh
+aws_elasticIPs_allocate.sh       aws_instances_terminate.sh  csinstances_start.sh
+aws_elasticIPs_associate2ins.sh  aws_loginKeyPair_create.sh  csinstances_stop.sh
+aws_elasticIPs_deallocate.sh     aws_loginKeyPair_delete.sh
+aws_elasticIPs_disassociate.sh   colour_utils_functions.sh
 ~~~
 {: .output}
 
@@ -52,12 +52,12 @@ The main code of `csinstances_create.sh` is below. **All it does** is to run the
 
 The script `csinstances_delete.sh` is organised and works the same way but it runs the scripts that *actually* **delete** instances and related resources instead.
 ~~~
-aws_loginKeyPair_create.sh $1
-aws_instances_launch.sh    $1		
-aws_elasticIPs_allocate.sh $1		
-aws_domainNames_create.sh  $1
-aws_elasticIPs_associate2instance.sh $1 
-aws_instances_configure.sh $1
+aws_loginKeyPair_create.sh      "$1" || { message "$error_message"; exit 1; }
+aws_instances_launch.sh         "$1" || { message "$error_message"; exit 1; }
+aws_elasticIPs_allocate.sh      "$1" || { message "$error_message"; exit 1; }
+aws_domainNames_create.sh       "$1" || { message "$error_message"; exit 1; }
+aws_elasticIPs_associate2ins.sh	"$1" || { message "$error_message"; exit 1; }
+aws_instances_configure.sh      "$1" || { message "$error_message"; exit 1; }
 exit 0
 ~~~
 {: .output}
@@ -67,7 +67,7 @@ That all means that each `aws_*.sh` script is in charge of:
 - for **one** or **multiple** AWS resources **all of the same type** (either *instance, login key, domain name, or IP address*).\
   Each script will make an AWS operation request for each instance name specified in the file "*instancesNames.txt*".
 
-Such organisation means that **all** login keys are created first, then **all** instances created, etc. --- and vice versa: **all** instances are deleted first, then **all** login keys are deleted, etc.  
+Such organisation means that **all** login keys are created first, then **all** instances are created, etc. --- and vice versa: **all** instances are deleted first, then **all** login keys are deleted, etc.  
 
 An alternative way to organise the Scripts would be such that: each instance and its resources (login key, domain name, and IP address) are created first, then a second instance and its resources are created, and so on. But the code gets much more complicated.
 
@@ -166,7 +166,7 @@ Once an `aws_*.sh` script sets access to "shared data" as described above, the s
 
 The loop of the script `aws_instances_launch.sh` (which creates one or multiple instances) is shown below. We have added the line numbers on the left for convenience but they don't correspond to the actual line numbers in the script. Also, we have ommitted the code for Results Handling after the invokation of the AWS operation request with `aws` --- such Results Handling is similar in all the `aws_*.sh` scripts.
 ~~~
-01 mapfile instancesNames < $instancesNamesFile
+01 instancesNames=( `cat $instancesNamesFile` )
 02 for instance in ${instancesNames[@]}
 03 do
 04   logkeyend=${instance%-src*}
@@ -189,7 +189,7 @@ The loop of the script `aws_instances_launch.sh` (which creates one or multiple 
 ~~~
 {: .bash}
 
-Line 01: `mapfile` makes the list `instancesNames` with the instances names in the file "*instancesNames.txt*" file (variable `$instancesNamesFile`).
+Line 01: the variable `instancesNames` is initialised as list of the instances names in the file "*instancesNames.txt*" file (variable `$instancesNamesFile`).
 
 Line 02: the loop starts, using the variable `instance` to store the instance name in turn.
 
@@ -274,8 +274,6 @@ The Scripts provide enough functionality to manage well one or multiple AWS inst
 
 4. Managing *dynamic* IP addresses (that change on rebooting instances), as opposed to *elastic* IP addresses, should perhaps be considered in order to make management more efficient and less dependant on resources limits.
 
-5. Temporary results. Some scripts write temporary results to the `/tmp/` directory while checking the status of a resource. For example, an IP address cannot be associated to an instance until the instance is finally created, but creating an instance take much longer than creating an IP address, so the Scripts have to wait. Similary when creating domain names, the Scripts have to wait for domain names to be visible before trying to access each instance to login to configure it. The point is: the scripts will not work if they cannot write to the `/tmp/` directory. This point may only be relevant to Windows and Mac users.  
-
-6. Adding the `--dry-run` option to the Scripts would facilitate development. The AWS CLI (`aws`) supports a `--dry-run` and it would be a matter of handling that option within the Scripts.
+5. Adding the `--dry-run` option to the Scripts would facilitate development. The AWS CLI (`aws`) supports a `--dry-run` and it would be a matter of handling that option within the Scripts.
 
 Congratulations! You have completed the course [Automated Management of AWS Instances](https://cloud-span.github.io/cloud-admin-guide-0-overview/).

@@ -17,13 +17,15 @@ keypoints:
 - It is convenient to be **logged in to** the AWS Console, in the **EC2 - Instances** page, to check the runs of the Scripts affect the target instances state as expected, and to quickly **reboot** an instance to run the configuration step if needed.
 ---
 > ## Prerequisites
-> To complete this episode you will need:
-> - to have configured your Linux enviroment as described either:
->   - in [Configure Your Linux Machine Environment](https://cloud-span.github.io/cloud-admin-guide-1-setting-work-environments/03-configure-linux-machine-environment) (third episode, first lesson) or
->   - in [Configure Your AWS CloudShell Environment](https://cloud-span.github.io/cloud-admin-guide-1-setting-work-environments/04-configure-aws-cloudshell-environment) (fourth episode, first lesson)
-> - to have configured instances internet access as described in [Configure Instances Internet Access](../01-configure-instances-internet-access) (first episode, this lesson). 
-> - your base domain name.
-> - the AWS resource IDs of your: **host zone**, **security group**, and **subnet**.
+> **Please read [Workshops Organisation](https://cloud-span.github.io/cloud-admin-guide-0-overview#course-overview)** if you haven't done so. To complete this episode you will need:
+> - if you are self-studying the course **or** attending a workshop using **your AWS account**:
+>   - to have configured your terminal enviroment as described in either of these episodes:
+>     - [Configure Your Terminal Environment](https://cloud-span.github.io/cloud-admin-guide-1-setting-work-environments/03-configure-terminal-environment/) (Episode 3, Lesson 1) or
+>     - [Configure Your AWS CloudShell Environment](https://cloud-span.github.io/cloud-admin-guide-1-setting-work-environments/04-configure-aws-cloudshell-environment) (Episode 4, Lesson 1)
+>    - to have configured instances internet access as described in [Configure Instances Internet Access](../01-configure-instances-internet-access) (previous episode, this lesson). 
+>   - your base domain name.
+>   - the AWS resource IDs of your: **host zone**, **security group**, and **subnet**.
+> - if you are attending a workshop using a **Cloud-SPAN AWS account** (and AWS Linux instance), you **will be provided** the required information at the workshop.
 {: .prereq}
 
 # Overview
@@ -34,7 +36,7 @@ This episode will guide you through the main tasks involved in creating and mana
 > This section introduces the Scripts, the directory-file structure the Scripts require to run successfully, and the **constraints you need to observe in configuring and running the Scripts**. 
 >
 > 2. **[Configure the Scripts Running Environment](#2-configure-the-scripts-running-environment).**\
-> You will create a running environment for the Scripts within your Linux environment: a Linux machine or the AWS CloudShell. You will create the directory-file structure that will enable the Scripts to manage a few AWS instances. 
+> You will create a running environment for the Scripts within your terminal environment: a Git Bash terminal, a Linux terminal, a Mac terminal or the AWS CloudShell terminal. You will create the directory-file structure that will enable the Scripts to manage a few AWS instances. 
 >
 > 3. **[Create the Instances](#3-create-the-instances).**\
 > You will create the instances specified in Section 2 and this will generate some results. The results generated and displayed to the terminal by the Scripts that create AWS resources (instances, login key files, etc.) will be explained to help you understand how the Scripts work. 
@@ -46,7 +48,7 @@ This episode will guide you through the main tasks involved in creating and mana
 > Creating AWS resources involves making AWS requests that return back results that are saved to files within the Scripts running environment. These files are crucial for the successful operation of the Scripts in stopping, starting and eventually deleting the created resources. These files are explained in this section to round up your understanding of how the Scripts work.
 >
 > 6. **[Stop, Start and Delete Instances - when and how](#6-stop-start-and-delet-instances---when-and-how).**\
-> This section describes the typical use-case scenario of instances management for a workshop /course. It describes our approach to instances management using both a **terminal** in your Linux environment and the AWS Console.
+> This section describes the typical use-case scenario of instances management for a workshop /course. It describes our approach to instances management using both your **terminal** and the AWS Console.
 >
 > 7. **[Unforseen Instance Management](#7-unforseen-instance-management).**\
 > This section describes our approach to handle unforseen instance management requests such as creating additional instances for a workshop due to late registrations, or deleting some (not all) instances before the end of a workshop due to cancellations. 
@@ -58,16 +60,16 @@ This episode will guide you through the main tasks involved in creating and mana
 # 1. The Scripts Running Environment
 These are Scripts that create and manage AWS instances:
 ~~~
-aws_domainNames_create.sh             aws_instances_configure.sh  csinstances_create.sh
-aws_domainNames_delete.sh             aws_instances_launch.sh     csinstances_delete.sh
-aws_elasticIPs_allocate.sh            aws_instances_terminate.sh  csinstances_start.sh
-aws_elasticIPs_associate2instance.sh  aws_loginKeyPair_create.sh  csinstances_stop.sh
-aws_elasticIPs_deallocate.sh          aws_loginKeyPair_delete.sh
-aws_elasticIPs_disassociate.sh        colours_msg_functions.sh
+aws_domainNames_create.sh        aws_instances_configure.sh  csinstances_create.sh
+aws_domainNames_delete.sh        aws_instances_launch.sh     csinstances_delete.sh
+aws_elasticIPs_allocate.sh       aws_instances_terminate.sh  csinstances_start.sh
+aws_elasticIPs_associate2ins.sh  aws_loginKeyPair_create.sh  csinstances_stop.sh
+aws_elasticIPs_deallocate.sh     aws_loginKeyPair_delete.sh
+aws_elasticIPs_disassociate.sh   colour_utils_functions.sh
 ~~~
 {: .output}
 
-The four scripts `csinstances_*.sh` (on the right) are to be run by the **user of the Scripts**, the person in charge of creating, stopping, starting and deleting AWS instances for a workshop/course. The scripts `aws_*.sh` are invoked by the scripts `csinstances_create.sh` or `csinstances_delete.sh` to either create or delete the corresponding domain names, IP addresses, and login keys. The file `colours_msg_functions.sh` provides (is "sourced" by) the other scripts with text colouring and message functions for the results of the other scripts to be easier to read.
+The four scripts `csinstances_*.sh` (on the right) are to be run by the **user of the Scripts**, the person in charge of creating, configuring, stopping, starting and deleting AWS instances for a workshop /course. The scripts `aws_*.sh` are invoked by the scripts `csinstances_create.sh` or `csinstances_delete.sh` to either create or delete instances and the corresponding domain names, IP addresses, and login keys. The file `colours_utils_functions.sh` provides (is "sourced" by) the other scripts with text colouring functions (for the results of the other scripts to be easier to read) and other utility functions.
 
 ### Configuring the directory structure
 
@@ -91,7 +93,7 @@ courses                         ### you can omit this directory or use other nam
 ~~~
 {: .output}
 
-We handle a *courses* directory that contains a directory for each course/workshop that we run, for example: *genomics01*, *genomics02*, *metagenomics01*, etc. Each course/workshop directory has its `inputs` directory and inside the three three files mentioned above: *instancesNames.txt*, `resourcesIDs.txt`, and `tags.txt` (note that we are using *this style* for file/directory names you can choose and `this style` for names you cannot change). 
+We handle a *courses* directory that contains a directory for each course /workshop that we run, for example: *genomics01*, *genomics02*, *metagenomics01*, etc. Each course directory has its `inputs` directory and inside the three three files mentioned above: *instancesNames.txt*, `resourcesIDs.txt`, and `tags.txt` (note that we are using *this style* for file/directory names you can choose and `this style` for names you cannot change). 
 
 You must create the directory structure above, or a similar one, and those three files before running the Scripts to create the instances for a course. The `outputs` directory inside each course/workshop directory is created automatically by the Scripts to save the  **results** of running the Scripts.
 
@@ -142,7 +144,7 @@ defined_in  manual
 
 You **cannot change the values on the left column**.
 
-You can change the values on the right column. When specifying the tags for each instance/resource, the Scripts change the value for the tag `name` (instance) to the actual name of each instance or with something like *resource-for-instanceName*. For this course, we recommend to use the values shown above.
+You can change the values on the right column. When creating and tagging each instance /resource, the Scripts change the value for the tag `name` (instance) to the actual name of each instance or with something like *resource-for-instanceName*. For this course, we recommend to use the values shown above.
 
 ### Running the Scripts --- overview and **constraints**
 To run any of the Scripts you only need to pass the name of your file *instancesNames.txt* as a parameter to the script you want to run. 
@@ -215,7 +217,7 @@ This and the subsequent sections are hands-on. In this section you are going to 
 While you can choose a different name for the file *instancesNames.txt* and for the parent directories of the `inputs` directory, for this course we recommend that you use the names suggested as otherwise you will have to adapt the intructions below. 
 
 ### Create the directory structure: `courses/instances-management/inputs`
-Open a terminal in your Linux environment (where you installed the Scripts): your Linux machine or the AWS CloudShell.
+Open your (Git Bash, Linux, Mac, or AWS CloudShell) terminal where you installed the Scripts.
 
 Being at the home directory (`~`), type the `mkdir` command below and press Enter to create the directory structure:
 ~~~
@@ -231,9 +233,9 @@ You will normally use your preferred editor to create those files. However, to s
 
 #### *Copy the files prepared for this section*
 
-The files we have prepared are in the directory where you downloaded the Scripts to install them (in lesson 1, episode 3 or 4).
+The files we have prepared are in the directory where you downloaded the Scripts with `git clone ..` (in Lesson 1, Episode 3 or 4).
 
-Copy them to your course `inputs` directory as follows (note that you must be in your home directory):
+Copy the files to your course `inputs` directory as follows (note that you must be in your home directory):
 ~~~
 csuser@cloud-admin-instance:~
 $ cp _tmp_cloudspan_aws/instances-management-course-data/inputs/* courses/instances-management/inputs
@@ -244,7 +246,7 @@ instancesNames.txt  resourcesIDs.txt  tags.txt
 {: .bash}
 
 #### *If you don't have the directory* `~/_tmp_cloudspan_aws/` 
-If you don't have that directory in your linux environment, download the Scripts again with the `git` command below and then do the copy in the code box above:
+If you don't have that directory in your terminal environment, download the Scripts again with the `git` command below and then do the copy in the code box above:
 ~~~
 $ git clone https://github.com/Cloud-SPAN/aws-instances.git ~/_tmp_cloudspan_aws
 ~~~
@@ -294,9 +296,9 @@ By not altering the first two rows, you are going to use the Cloud-SPAN AMI, who
 #### *Edit the file* `resourcesIDs.txt`
 You need to use a **plain-text editor** such as `nano`, `vim`, `emacs`, etc., to update the file `resourcesIDs.txt` so that no special characters get into the file which may cause the Scripts to fail.
 
-If you are using a *Linux machine environment* (as opposed to the *AWS CloudShell environment*), you should be able to edit the file with your preferred **plain text editor**.
+If you are using a terminal other than the AWS CloudShell terminal you should be able to edit the file with your preferred **plain text editor**.
 
-If you are using the *AWS CloudShell environment*, you can edit the file with the `vim` editor if you are comfortable with it. Otherwise, you can download the file to your machine, edit it there with your preferred **plain text editor**, and upload it back to your *AWS CloudShell enviroment*. The screenshot below shows the menu to download and upload files:
+If you are using the AWS CloudShell terminal, you can edit the file with the `vim` editor if you are comfortable with it. Otherwise, you can download the file to your machine, edit it there with your preferred **plain text editor**, and upload it back to your *AWS CloudShell enviroment*. The screenshot below shows the menu to download and upload files:
 
 ![Screenshot of AWS Console page in a browser showing the AWS CloudShell terminal with the options Actions, "Download File" and "Upload File" circled.](../fig/02-instances-management/01-aws-cloudshell-actions-menu.png){: width="900px"}
 
@@ -309,7 +311,7 @@ $ csinstances_create.sh courses/instances-management/inputs/instancesNames.txt
 ~~~
 {: .bash}
 
-Once you press Enter the output you will see in your terminal will be like the one in the screenshot below. The script `csinstances_create.sh` will display a message to the terminal as it invokes each of the scripts that creates/configures AWS resources. Each of these scripts will first display in cyan colour what it does ("Creating login keys" for example); it will then display to the terminal **part of** the results of creating/configuring the resources, and save to files in the `outputs` directory all of those results. 
+Once you press Enter the output you will see in your terminal will be like the one in the screenshot below. The script `csinstances_create.sh` will invoke each of the scripts that creates /configures AWS resources. Each of these scripts will first display in cyan colour what it does ("Creating login keys" for example); it will then display to the terminal **part of** the results of creating /configuring the resources, and save to files in the `outputs` directory all of those results. 
 
 ![Screenshot of Linux terminal showing the terminal prompt, the run of the command "csinstances_create.sh courses/instances-management/inputs/instancesNames.txt", and part of the output results of that command.](../fig/02-instances-management/02-results-of-running-csinstance_create.sh.png){: width="900px"}
 
@@ -319,7 +321,7 @@ Once the domain names are created, the allocated **IP addresses** are **associat
 
 ![Screenshot of Linux terminal showing the middle part of the output results of the command csinstances_create.sh run previously.](../fig/02-instances-management/03-results-of-running-csinstance_create.sh-associating-IPaddress.png){: width="900px"}
 
-The final step in creating instances is to **configure each instance**, see bottom of screenshot above and the screenshot below. We will look in some detail at the output of configuring instances in [Section 8. Troubleshooting](#8-troubleshooting) below and in the next episode  [AMIs Management Tasks](../03-ami-management-tasks).  For the time being you only need to know that configuring each instance consists of:
+The final step in creating instances is to **configure each instance**, see bottom of screenshot above and the screenshot below. We will look in some detail at the output of configuring instances in [Section 8. Troubleshooting](#8-troubleshooting) and in the next episode  [AMIs Management Tasks](../03-ami-management-tasks).  For the time being you only need to know that configuring each instance consists of:
 
 - enabling access to the `csuser` account --- a newly created instance can only be accessed through the `ubuntu` user account
 - configuring the "**host name**" to be the instance domain name (instead of the instance IP address), so that the terminal prompt, when accessing the instance with `ssh`, is something like this: `csuser@instance01:~ $` and `ubuntu@instance01.cloud-span.aws.york.ac.uk:~ $` --- instead of something like this: `csuser@52.212.13.253:~ $` and `ubuntu@52.212.13.253:~ $`.
@@ -374,9 +376,9 @@ The output of the `ls` command should be the list of sub-directories (in brown) 
 
 ![Screenshot of Linux terminal showing the run of the command "ls courses/instances-management/outputs/"; the results show the names of the directories created by the scripts invoked by the scripts csinstances_create.sh.](../fig/02-instances-management/05-results-of-running-csinstance_create.sh-outputs-dir.png){: width="900px"}
 
-Each of the Scripts that creates or configures AWS resources **makes/sends requests to AWS**. AWS validates and performs each request if it is valid, and **returns back** the result of the request wich states whether the request was successful or not, and if successful, **the resource ID of the created resource or configuration requested** along with other information. 
+Each of the Scripts that creates or configures AWS resources **makes/sends requests to AWS**. AWS validates and performs each request if it is valid, and **returns back** the result of the request wich states whether the request was successful or not, and if **successful**, the **resource ID** of the created resource or configuration requested along with other information. 
 
-Each of the Scripts that makes such requests creates a sub-directory within the `outputs` directory to save the results of each request, to a file whose name has, as a sub-string, the name of the relevant instance as specified in the input file *instancesNames.txt* that you use to create the instances. 
+Each of the Scripts that makes such requests creates a sub-directory within the `outputs` directory **to save** the results of each request, to a file whose name has, as a sub-string, the name of the relevant instance as specified in the input file *instancesNames.txt* that you use to create the instances. 
 
 The files that were created for the above run of `csinstances_create.sh` are shown in the screenshot below --- use the same `ls` commands in the screenshot to list the files in each sub-directory within your `outputs` directory. If you used the instances names we suggested to create the instances, the files created from your run of `csinstances_create.sh` should have the same names as in the screenshot:
 
@@ -403,11 +405,11 @@ Our typical scenario in managing instances is as follows. When a workshop is sch
 - re-**start** the instances again some time before the workshop starts.
 - **delete** all the instances once the workshop is over.
 
-We perform those four tasks running the Scripts `csinstances_*.sh` in our Linux terminal, **but we usually are logged in** to the **AWS Console** too, at the **EC2 --- Instances** page, to check that the  **instances state** changes according to the state intended by each script, as outlined below.  
+We perform those four tasks running the Scripts `csinstances_*.sh` in our terminal, **but we usually are logged in** to the **AWS Console** too, at the **EC2 --- Instances** page, to check that the  **instances state** changes according to the state intended by each script, as outlined below.  
 
 Follow along: 
 - login to the AWS Console (with your IAM user account), type EC2 (for Elastic Compute Cloud) in the AWS search box at the top and press Enter, and then click on **Instances** on the left menu pane, see the page below. 
-- run the scripts below in your Linux environment
+- run the scripts below in your terminal
 
 ### Creating instances one or more days before a workshop starts
 **Only run** `csinstances_create.sh` **if you haven't done so**!!!
@@ -529,7 +531,7 @@ The newly created sub-directories are those in boxes; their names are suffixed w
 We won't look into these files. Their main use is to register the results of AWS requests in case of errors happening. They were essential while developing the Scripts to get them right.
 
 # 7. Unforseen Instance Management
-The Scripts use-case scenario outlined above is typical of short workshops that last 1-4 days in a row. Yet sometimes it doesn't go that smoothly, that is, sometimes you won't able to run the scripts `csinstances_*.sh` using the same file "instancesNamesFile".
+The Scripts use-case scenario outlined above is typical of short workshops that last 1-4 days in a row. Yet sometimes it doesn't go that smoothly. Sometimes you won't be able to run the scripts `csinstances_*.sh` using the same file "instancesNamesFile".
 
 Sometimes you will receive requests like those in the list below after you have both created the "instancesNamesFile" and run the script `csinstances_create.sh`, that is, some instances have been created and then you receive requests like:
 
@@ -546,7 +548,7 @@ There is no problem with having multiple "instancesNamesFile"s in an `../inputs/
 
 The main issue is how to name those multiple files so that you **do** keep track of what happens, instance-management wise, throughout a workshop.
 
-The listing below illustrates the naming convention we used to name multiple "instancesNamesFile"s to handle similar requests to the ones above. The listing shows the files in the `inputs` directory of a workshop we ran through late October and November 2022: 
+The listing below illustrates the naming convention we follow to name multiple "instancesNamesFile"s to handle similar requests to the ones above. The listing shows the files in the `inputs` directory of a workshop we ran through late October and November 2022: 
 
 ~~~
 instancesNames20221028-create-301-25.txt
@@ -588,19 +590,6 @@ The tedious part of this file naming convention is specifying the **intancesNumb
 
 This last section presents the problems we have come across using the Scripts and how we solved them. 
 
-### Don't run `csinstances_create.sh` for the same instances names more than once **before** ...
-That is: **For the same course/workshop**, don't run `csinstances_create.sh` for the same instances names more than once before **deleting the instances first**.
-
-What would you do that? By mistake --- it happened to us.
-
-**The problem is** that the files (created by the Scripts) that contain the AWS resources IDs of each instance and its resources will be **overwritten** by any subsequent run of `csinstances_create.sh`. You will lose those resources IDs and hence **won't be able to delete the resources using the Scripts** any more. 
-
-**The solution is** to get to the AWS Console, to the EC2 pages where each of those resources are listed and delete them there, selecting them with the mouse, etc. You need to get to the EC2 pages for **Instances**, **IP Adresseses** and **Login Keys**, and to the AWS Route 53 **Host Zone** page to delete the instances domain names records.
-
-Note in the listing of the `inputs` directory in the previous section, that we created the instance21 twice, on 28 October and on 15 November, but we deleted it on 14 November. So we did not have to get to AWS Console to delete it manually. However, we did lost the files with the resources IDs that were generated from the run of `csinstances_create` on 28 October.    
-
-There is no problem with losing those files as long as you lose them once you don't need them to run the Scripts.
-
 ### "*Connection timed out*" or "*Connection refused*" messages persist 
 
 Those messages are related to accessing an instance with `ssh`. We have come across those messages in two scenarios: 
@@ -611,7 +600,7 @@ Those messages are related to accessing an instance with `ssh`. We have come acr
 
 ![Screenshot of Linux terminal showing the last part of the output of running the command csinstances_create.sh; that part corresponds to the configuration step of each instance and the screenshot shows the "Connection timed out" and "Connection refused" messages circled that may arise during the configuration step.](../fig/02-instances-management/12-results-of-running-csinstance_create.sh-configuring-instance2.png){: width="900px"}
 
-Note in the screenshot the message in brown "**Please wait for SSH server (you may see a few 'Connection timed out/Connection refused' messages)**", and the `ssh`-related message in white just below "**ssh -o ConnectTimeout=5 -o StrictHostKeyChecking=no -i courses/...**". The script `aws_instances_configure.sh` prints those messages and then gets into a loop to repeatedly issue that `ssh` command until it is successful.  In the screenshot, three issues of that `ssh` command were unsuccessful and the message "**ssh: connect to host instance01... port 22: Connection refused**" was displayed three times. Once that `ssh` command is successful, `aws_instances_configure.sh` proceedes to issue the `ssh` commands that configure the instance. That is, the sole purpose of the `ssh` command that is issued within the loop is to ensure the SSH server in the instance is ready.
+Note in the screenshot the message in brown "**Please wait for SSH server (you may see a few 'Connection timed out/Connection refused' messages)**", and the `ssh`-related message in white just below "**ssh -o ConnectTimeout=5 -o StrictHostKeyChecking=no -i courses/...**". The script `aws_instances_configure.sh` prints those messages and then gets into a loop to repeatedly issue that `ssh` command until it is successful.  In the screenshot, three issues of that `ssh` command were unsuccessful and the message "**ssh: connect to host instance01... port 22: Connection refused**" was displayed three times. Once that `ssh` command is successful, `aws_instances_configure.sh` proceedes to issue the `ssh` commands that configures the instance. That is, the sole purpose of the `ssh` command that is issued within the loop is to ensure the SSH server in the instance is ready.
 
 **How many "Connection timed out/Connection refused" (unsuccessful `ssh`) messages would be "normal"?**
 
@@ -621,7 +610,15 @@ Sometimes it is network congestion during peak hours that will cause those messa
 
 Usually those messages will be displayed for the first instances to be configured and not for subsequent instances because the SSH server in subsequent instances has some more time to get ready. 
  
-However, an instance configuration step may indeed get stuck displaying those messages no end. If this happens, the following has always worked for us:
+However, an instance configuration step may indeed get stuck displaying those messages no end. It has happened to us under two conditions that we will call test conditions and normal conditions.
+
+#### **Test conditions**
+By test conditions we mean creating instances to test something (as opposed to creating instances for a workshop: normal conditions). In testing something, we have sometimes created a few instances and immediately after realised we forgot somethineg, corrected it, deleted the instances and created the instances again using the same instances names, and then got those messages no end. 
+
+We had to delete the instances, and create new ones with different names. We believe the problem is the too close subsequent requests to map the same domain names to different IP addresses. The AWS domain name system, Route 53, needs sometime to propagate the changes to its servers, etc. It has not been worth trying to solve this. They are only tests and we can use other instances names.  
+
+#### **Normal conditions**
+Creating instances for a workshop is normal conditions. We have got those messages under normal conditions and the following has always worked for us:
 - **abort** the run of the script `csinstances_create.sh` by pressing `Ctrl-c` (the keys Ctrl and c simultaneously) a few times until you get back the prompt of your terminal. You will be aborting the script `aws_instances_configure.sh` first, the one that displays those messages, and then the  script `csinstances_create.sh` which invoked `aws_instances_configure.sh` as the **last step** of creating instances.\
 Note that **the AWS resources of all instances have already been created** when you abort the Scripts while seeing the messages "Connection timed out" or "Connection refused". It is only the **instances configuration** phase that has not been completed.
 
@@ -643,11 +640,11 @@ Note that **the AWS resources of all instances have already been created** when 
 
 - Alternatively, you may try first all of the steps above except **rebooting** the instance. It has worked for us. We believe the benefit of rebooting the instance is the cleaning/deleting of any previous `ssh` requests enqueued somewhere waiting to be served.
 
-**The other scenario** where `Connection timed out /Connection refused` messages may be displayed is when an instance is to be accessed by the end user (after the instance has been configured and is running). In this case, it is the configuration of the server the end user is connected to gain access to the Internet. The server is blocking `ssh` communication, either from the end user, `ssh` client to reach the instance or from the instance SSH server to reach the end user machine, or both. If you have a mobile phone handy, turn on the "Mobile Hotspot" WiFi, ask the end user to connect to it, and then to connect to the instance. If this works, the end user needs to ask the IT department responsible for the server to solve the issue.
+**The other scenario** where `Connection timed out /Connection refused` messages may be displayed is when an instance is to be accessed by the end user (after the instance has been configured and is running). In this case, it is the configuration of the server the end user is connected to gain access to the Internet. The server is blocking `ssh` communication, either from the end user `ssh` client to reach the instance or from the instance SSH server to reach the end user machine, or both. If you have a mobile phone handy, turn on the "Mobile Hotspot" WiFi, ask the end user to connect to it, and then to connect to the instance. If this works, the end user needs to ask the IT department responsible for the server to solve the issue.
 
 ### WARNING: REMOTE HOST IDENTIFICATION HAS CHANGED
 
-The error behind this message has also to do with accessing and instance with `ssh`. It used happened to us and happened to a workshop participant whose instance was created, deleted and created again with the same name. 
+The error behind this message has also to do with accessing and instance with `ssh`. It used to happen to us and happened to a workshop participant whose instance was created, deleted and created again with the same name. 
 
 The participant was sent the login key file the first time the instance was created. We then deleted the instance (instance321 in the file listing in [Section 7. Unforseen Instance Management](#7-unforseen-instance-management) for not seeing any progress). The participant asked the instance to be created again. We created the instance again using the same name and send the participant the new login key file. When using `ssh` to login to the newly created instance, the participant got that message. 
 
