@@ -47,7 +47,7 @@ This episode will guide you through the main tasks involved in creating and mana
 > 5. **[Understand the Results of Creating Instances](#5-understand-the-results-of-creating-instances).**\
 > Creating AWS resources involves making AWS requests that return back results that are saved to files within the Scripts running environment. These files are crucial for the successful operation of the Scripts in stopping, starting and eventually deleting the created resources. These files are explained in this section to round up your understanding of how the Scripts work.
 >
-> 6. **[Stop, Start and Delete Instances - when and how](#6-stop-start-and-delet-instances---when-and-how).**\
+> 6. **[Stop, Start and Delete Instances - when and how](#6-stop-start-and-delete-instances---when-and-how).**\
 > This section describes the typical use-case scenario of instances management for a workshop /course. It describes our approach to instances management using both your **terminal** and the AWS Console.
 >
 > 7. **[Unforseen Instance Management](#7-unforseen-instance-management).**\
@@ -395,7 +395,7 @@ The two screenshots below show the resource IDs of instance01 and its IP address
 ![Screenshot of Linux terminal showing the run of the command "more courses/instances-management/outputs/instances-creation-output/instance01.txt" which displays the contents of that file, with the "InstanceID" field and its value circled.](../fig/02-instances-management/07-results-of-running-csinstance_create.sh-instance01-id.png){: width="900px"}
 ![Screenshot of Linux terminal showing the run of the command "more courses/instances-management/outputs/ip-addresses-allocation-output/elastic-IPaddress-for-instance01.txt" which displays the contents of that file, with the "AllocationID" field and its value circled.](../fig/02-instances-management/08-results-of-running-csinstance_create.sh-eip-allocation-id.png){: width="900px"}
 
-# 6. Stop, Start and Delet Instances - when and how
+# 6. Stop, Start and Delete Instances - when and how
 
 When you create instances through running `csinstances_create.sh`, the instances and their related resources (login key file, etc.) are created and configured first; then the instances are run (launched/started), and are left running until you either stop them or delete them. 
 
@@ -533,22 +533,49 @@ We won't look into these files. Their main use is to register the results of AWS
 # 7. Unforseen Instance Management
 The Scripts use-case scenario outlined above is typical of short workshops that last 1-4 days in a row. Yet sometimes it doesn't go that smoothly. Sometimes you won't be able to run the scripts `csinstances_*.sh` using the same file "instancesNamesFile".
 
-Sometimes you will receive requests like those in the list below after you have both created the "instancesNamesFile" and run the script `csinstances_create.sh`, that is, some instances have been created and then you receive requests like:
+Sometimes you will receive requests like those in the list below after you have both created an "instancesNamesFile" and run the script `csinstances_create.sh` with that file, that is: some instances have been created, and then, you receive requests like:
 
 - can you create N more instances? --- We received N last-minute registrations to the workshop.
 - can you delete instance A? --- The participant is ill and cancelled.
 - can you leave the instances B and C running after the workshop until *date*? --- The participants have not yet managed to cover the course but are very keen to do it.
 - can you stop instance D (don't delete it) until further notice? --- The participant has started the workshop but something urgent happened and will get back to it asap.
 
-If you are to fulfill such requests, since a set of instances has already been created using the  file, say, *instancesNames.txt*, you **cannot use** that file to handle such requests, and it is not convenient that you edit it. 
+If you are to fulfill such requests, then you **need to manage multiple** "instancesNamesFile"s. This is because the Scripts create (configure, stop, start or delete) **all the instances** whose names you specify in an "instancesNamesFile" you pass in to the Scripts.
 
-**You need to create other files containing the names of the instances to be created, stopped, started or deleted**. 
+For **example**, suppose the following scenario: (**1**) you have created the three instances as instructed in Section [3 Create the Instances](#3-create-the-instances) --- you used the file *instancesNames.txt* &nbsp;to create the instances named *instance01*, *instance02*, and *instance03*; (**2**) you are then asked to create another instance (for a latecomer to the workshop you are running); and (**3**) for the new instance you decide to use the name *instance04*.
+
+Now you need to create another "instancesNamesFile", say, *instancesNames-04.txt*, that contains only the instance name *instance04*, and then run `csinstances_create.sh instancesNames-04.txt`.
+
+### Avoid modifying an "instancesNamesFile" that you have already used to create intances
+In the example above, you **should not add** the instance name *instance04* &nbsp;to the file *instancesNames.txt* &nbsp;(that you previously used to create *instances01*, *..02* and &nbsp;*..03*), and then **run again** `csinstances_create.sh instancesNames.txt` --- **it will fail** as shown in the screenshot below: 
+
+![Screenshot of Linux terminal showing the run of csinstance_create.sh and the abort message for having found that some instances or related resources have already been created.](../fig/02-instances-management/13-results-of-running-csinstance_create.sh-AGAIN-aborted.png){: width="900px"}
+
+### The Scripts *check* &nbsp;instance operations are *valid* &nbsp;given the state of the running environment
+Recall (from Section [3 Create the Instances](#3-create-the-instances)) that login keys are created first, then instances, etc. Login keys are created by the script `aws_loginKeyPair_create.sh` which, as you can see in the screenshot above, first checks whether the login key files for the instances to be created exist or not, **aborting** its execution if any such file exists. In the run shown in the screenshot, `aws_loginKeyPair_create.sh` found the login key files for *instances01*, *..02*, &nbsp;and *..03*, and hence displayed the message shown and aborted its execution which, in turn, caused `csinstances_create.sh` to abort its execution as well.
+
+As stated in that message, the files that were found contain the **AWS resource IDs** of login keys **already created**. Those resource IDs are needed to delete the login keys from your AWS account.  The Scripts **do not overwrite**  files that contain such resources IDs. If those files are **overwritten**, or lost, **before you delete** the corresponding instances and related resources (running `csinstances_delete.sh`), you will need to use the **AWS Console** to delete **manually** the corresponding instances, login keys, IP addresses and domain names. 
+
+If you want to create instances **with names** you **have already used**, you **must first delete** the instances already created and their related resources (running `csinstances_delete.sh`), then delete or rename the `../outputs/` parent directory, and finally create the instances. We have done so only for some testing, see the Troubleshooting section, subsections ["Connection timed out" or "Connection refused" messages persist](#connection-timed-out-or-connection-refused-messages-persist) and [Test conditions](#test-conditions).  
+
+All the Scripts that **create** AWS resources carry out a similar **check** to that carried out by `aws_loginKeyPair_create.sh`. For each instance name in the "instancesNamesFile" passed in to **`csinstances_create.sh`**, each script checks whether the instance, or the resource for that instance, has been created or not, which amounts to checking whether the file with the corresponding AWS resource ID exists or not. If any such file **does** exist, the script aborts its execution **without** issuing any AWS request to create resources. 
+
+All the Scripts that **delete** AWS resources carry out a similar check but **act on the opposite**. ... If any such file **does not** exist, the script aborts its execution **without** issuing any AWS request to delete resources. The script `aws_instances_configure.sh` does this check.
+
+Given a set of instances names as specified in an "instancesNamesFile", the two checks above guarantee that all or none of the instances, and/or related resources, are created or deleted. 
+
+Finally, all the Scripts `aws_*.sh` check that the "instancesNamesFile" passed in to them has only one value (one instance name) in each line. Thus, if you inadvertently passed in to the Scripts the file name `resourcesIDs.txt` or `tags.txt`, which both have two values in each line, the Scripts will abort their execution. 
+
+
+### Using multiple "*instanceNamesFile*"s to manage unforseen instance management requests
 
 There is no problem with having multiple "instancesNamesFile"s in an `../inputs/` directory. 
 
-The main issue is how to name those multiple files so that you **do** keep track of what happens, instance-management wise, throughout a workshop.
+The main issue is how to name those multiple files so that you **keep track** of what happens, regarding instance management, throughout a workshop.
 
-The listing below illustrates the naming convention we follow to name multiple "instancesNamesFile"s to handle similar requests to the ones above. The listing shows the files in the `inputs` directory of a workshop we ran through late October and November 2022: 
+The listing below illustrates the naming convention we follow to name multiple "instancesNamesFile"s to handle similar requests to the ones described in the introduction to this section. 
+
+The listing shows the files in the `inputs` directory of a workshop we ran through late October and November 2022: 
 
 ~~~
 instancesNames20221028-create-301-25.txt
@@ -584,7 +611,7 @@ The other "instancesNamesFile"s in the list were handled similarly to the way th
 - naming the file *instancesNames***Date**-**operation**-**instancesNumbersList**.txt --- where **operation** is create, stop, start, or delete.
 - running the relevant `csinstances_*.sh` script to create, stop, start or delete the target instances.
 
-The tedious part of this file naming convention is specifying the **intancesNumbersList**. However, it does not happen often and it gives you an overall accurate view of what instances operations you have performed.
+The tedious part of this file naming convention is specifying the **intancesNumbersList**. However, it is not required often and it gives you an accurate overview of the instances operations you have performed.
 
 # 8. Troubleshooting
 
