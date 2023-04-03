@@ -19,7 +19,7 @@ keypoints:
 > - if you are self-studying the course **or** attending a workshop using **your AWS account**:
 >   - to have created and configured your AWS account as described in Episodes 1 and 2 of Lesson 1, namely: [Create Your AWS Account](./01-create-aws-account) and [Configure Your AWS Account](02-configure-aws-account).
 >   - the AWS Console login details of your IAM user account: **login page**, **username** and **password**. 
-> - if you are attending a workshop using a **Cloud-SPAN AWS account** (and AWS Linux instance), you **don't need** to complete this episode.
+> - if you are attending a workshop using a **Cloud-SPAN AWS account** (and an AWS Linux instance), you **don't need** to complete this episode.
 {: .prereq}
 
 

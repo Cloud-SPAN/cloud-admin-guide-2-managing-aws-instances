@@ -9,7 +9,7 @@ questions:
 objectives:
 - Learn the organisation and workings of the Scripts.
 - Learn how the Scripts use the AWS CLI commands.
-- Learn how to access and use the AWS CLI Command Reference --- likely needed to improve the Scripts.
+- Learn how to access and use the AWS CLI Command Reference --- needed to improve the Scripts.
 keypoints:
 - The Scripts comprise a modular organisation wherein each script is a module with a specific task that can be applied to one or multiple instances.
 - The Scripts communicate through shared files in the `inputs` and `outputs` directories of a "course".

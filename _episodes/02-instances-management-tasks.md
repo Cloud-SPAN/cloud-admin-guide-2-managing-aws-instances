@@ -19,13 +19,16 @@ keypoints:
 > ## Prerequisites
 > **Please read [Workshops Organisation](https://cloud-span.github.io/cloud-admin-guide-0-overview#course-overview)** if you haven't done so. To complete this episode you will need:
 > - if you are self-studying the course **or** attending a workshop using **your AWS account**:
+>   - to have created your AWS account as described in [Create Your AWS Account](./01-create-aws-account) (Episode 1, Lesson 1).
+>   - to have configured your AWS account as described in [Configure Your AWS Account](02-configure-aws-account) (Episodes 2, Lesson 1).
 >   - to have configured your terminal enviroment as described in either of these episodes:
->     - [Configure Your Terminal Environment](https://cloud-span.github.io/cloud-admin-guide-1-setting-work-environments/03-configure-terminal-environment/) (Episode 3, Lesson 1) or
+>     - [Configure Your Terminal Environment](https://cloud-span.github.io/cloud-admin-guide-1-setting-work-environments/03-configure-terminal-environment/) (Episode 3, Lesson 1) --- **or** 
 >     - [Configure Your AWS CloudShell Environment](https://cloud-span.github.io/cloud-admin-guide-1-setting-work-environments/04-configure-aws-cloudshell-environment) (Episode 4, Lesson 1)
 >    - to have configured instances internet access as described in [Configure Instances Internet Access](../01-configure-instances-internet-access) (previous episode, this lesson). 
->   - your base domain name.
+>   - your **base domain name**.
 >   - the AWS resource IDs of your: **host zone**, **security group**, and **subnet**.
-> - if you are attending a workshop using a **Cloud-SPAN AWS account** (and AWS Linux instance), you **will be provided** the required information at the workshop.
+>   - the AWS Console login details of your IAM user account: **login page**, **username** and **password**. 
+> - if you are attending a workshop using a **Cloud-SPAN AWS account** (and an AWS Linux instance), you **will be given** the necessary information at the workshop.
 {: .prereq}
 
 # Overview

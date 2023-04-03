@@ -18,7 +18,19 @@ keypoints:
 - Step (2) --- configuring instances to-become-AMIs may be simple or rather complex depending on what needs to be updated, and may involve configuring that enables use of specific AWS (virtualised) "hardware platform" components (cf. ENA or Elastic Network Adapters). We use scripts whenever possible to help configuring such instances. It helps reducing mistakes, automating complex tasks, and documenting our work.
 ---
 > ## Prerequisites
-> To complete this episode you need to have covered **hands-on** the previous episode: [Instances Management Tasks Using the Scripts](../02-instances-management-tasks/).
+> **Please read [Workshops Organisation](https://cloud-span.github.io/cloud-admin-guide-0-overview#course-overview)** if you haven't done so. To complete this episode you will need:
+> - to have completed the previous episode: [Instances Management Tasks Using the Scripts](../02-instances-management-tasks/).
+> - if you are self-studying the course **or** attending a workshop using **your AWS account**:
+>   - to have created your AWS account as described in [Create Your AWS Account](./01-create-aws-account) (Episode 1, Lesson 1).
+>   - to have configured your AWS account as described in [Configure Your AWS Account](02-configure-aws-account) (Episodes 2, Lesson 1).
+>   - to have configured your terminal enviroment as described in either of these episodes:
+>     - [Configure Your Terminal Environment](https://cloud-span.github.io/cloud-admin-guide-1-setting-work-environments/03-configure-terminal-environment/) (Episode 3, Lesson 1) --- **or** 
+>     - [Configure Your AWS CloudShell Environment](https://cloud-span.github.io/cloud-admin-guide-1-setting-work-environments/04-configure-aws-cloudshell-environment) (Episode 4, Lesson 1)
+>    - to have configured instances internet access as described in [Configure Instances Internet Access](../01-configure-instances-internet-access) (previous episode, this lesson). 
+>   - your **base domain name**.
+>   - the AWS resource IDs of your: **host zone**, **security group**, and **subnet**.
+>   - the AWS Console login details of your IAM user account: **login page**, **username** and **password**. 
+> - if you are attending a workshop using a **Cloud-SPAN AWS account** (and an AWS Linux instance), you **will be given** the necessary information at the workshop.
 {: .prereq}
 
 # Introduction
@@ -107,7 +119,8 @@ As mentioned in the introduction, you will normally create an AMI in the AWS Con
 > This is rather useful when the configuration of an instance to-become-AMI is long, .., complex. You can create various intermediate AMIs at different levels of progress and roll back to any of them if needed --- kind of managing multiple **commits** with `git`. If you need to roll back to an intermediate AMI, say, AMI02, you will create an AWS instance from AMI02 and that instance will become your new instance to-become-AMI. 
 {: .callout}
 
-**Login to** the AWS Console with your IAM account user. Then **go to** the page "EC2 - Instances":
+## Login to the AWS Console with your IAM account user
+Once you are logged in to the AWS Console, **go to** the page "EC2 - Instances" as follows:
   - type **EC2** in the AWS search box at the top.
   - in the page that appears, "EC2 Dashboard" (not shown), click on **Instances** on the left menu pane.
 
@@ -449,7 +462,7 @@ By the way, you can change the instance type of an instance in the AWS Console a
 - change the instance type: click on **Actions** at the top, then on **Instance settings**, and then on **Change instance type**. A new page will appear where you will be able to change the instance type --- save the changes
 - restart the instance. 
 
-## Other scripts that maight help you create AMIs
+## Other scripts that may help you create AMIs
 When you downloaded the Scripts that create and manage instances, you also you downloaded other scripts that we regularly use to create AMIs (configure instances to-become-AMIs), namely:
 
 - `cpfromInstance.sh`
