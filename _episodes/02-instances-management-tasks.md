@@ -534,20 +534,19 @@ The newly created sub-directories are those in boxes; their names are suffixed w
 We won't look into these files. Their main use is to register the results of AWS requests in case of errors happening. They were essential while developing the Scripts to get them right.
 
 ## Create instances in two steps to avoid unnecessary costs
-Instead of creating instances in one go running `csinstances_create.sh`, you can create instances **in two steps** running first the script `csinstances_create1stPart.sh`, and a few days later the script `csinstances_create2ndPart.sh`. The syntax is the same, namely:
+You can avoid some of the cost of deploying instances by "creating instances" **in two steps**. You will first run the script `csinstances_create1stPart.sh`, and a few days later (just before the relevant workshop starts) the script `csinstances_create2ndPart.sh`. As shown below, you run those two scripts in the same way as you run all the other scripts, passing in the "instancesNamesFile" that contains the names of the instances to create:
 
 ~~~
 csuser@cloud-admin-instance:~
-$ csinstances_create1stPart.sh courses/instances-management/inputs/instancesNames.txt 
+$ csinstances_create1stPart.sh  courses/instances-management/inputs/instancesNames.txt 
 
 ##### and a few days later:
 csuser@cloud-admin-instance:~
-$ csinstances_create2ndPart.sh courses/instances-management/inputs/instancesNames.txt 
+$ csinstances_create2ndPart.sh  courses/instances-management/inputs/instancesNames.txt 
 ~~~
 {: .bash}
 
-The script 
-
+Doing so will save a significant cost if you are running a workshop that requires relatively large instances in terms of compute and storage capacity, up to about US $300 per day (as at 20230414), for 50 instances of type t3.2xlarge, each instance with 240GB storage. The savings come out as follows. Recall that the script `csinstances_create.sh` first runs the script that creates the **login keys**, then the script that creates the **instances**, then .. the **IP addresses** and finally .. the **domain names**. Of all these resources, it is the instances that are more costly. The script `csinstances_create1stPart.sh` only creates the login keys, the IP addresses and the domain names. You will then be able to send the workshop participants their login key and instance domain name, say, on a Friday. On the following Monday you will then run `csinstances_create2ndPart.sh` to create the instances, associate the instances to the IP addresses, and to configure the instances.
 
 # 7. Unforseen Instance Management
 The Scripts use-case scenario outlined above is typical of short workshops that last 1-4 days in a row. Yet sometimes it doesn't go that smoothly. Sometimes you won't be able to run the scripts `csinstances_*.sh` using the same file "instancesNamesFile".
