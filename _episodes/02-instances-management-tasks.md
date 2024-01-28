@@ -281,7 +281,7 @@ defined_in	manual
 ~~~
 {: .bash}
 
-The contents of the file `resourcesIDs.txt` you copied is below. **You need to update the values on the right column of the last four rows** with the values of your: security group id, subnet id, host zone (domain name), and host zone id, in this order --- don't change anything else. 
+The contents of the file `resourcesIDs.txt` you copied is below. **You need to update the values on the right column of the last four rows** with the values of your: security group id, subnet id, host zone (domain name), and host zone id --- don't change anything else. 
 ~~~
 csuser@cloud-admin-instance:~
 $ cat courses/instances-management/inputs/resourcesIDs.txt 
@@ -299,9 +299,9 @@ By not altering the first two rows, you are going to use the Cloud-SPAN AMI, who
 #### *Edit the file* `resourcesIDs.txt`
 You need to use a **plain-text editor** such as `nano`, `vim`, `emacs`, etc., to update the file `resourcesIDs.txt` so that no special characters get into the file which may cause the Scripts to fail.
 
-If you are using a terminal other than the AWS CloudShell terminal you should be able to edit the file with your preferred **plain text editor**.
+The editors `nano` and `vim` are available both in the Git Bash terminal and the AWS CloudShell terminal. 
 
-If you are using the AWS CloudShell terminal, you can edit the file with the `vim` editor if you are comfortable with it. Otherwise, you can download the file to your machine, edit it there with your preferred **plain text editor**, and upload it back to your *AWS CloudShell enviroment*. The screenshot below shows the menu to download and upload files:
+If you are using the AWS CloudShell terminal, you can download the file to your machine and edit it there with your preferred **plain text editor**, and upload it back to your *AWS CloudShell enviroment*. The screenshot below shows the menu to download and upload files:
 
 ![Screenshot of AWS Console page in a browser showing the AWS CloudShell terminal with the options Actions, "Download File" and "Upload File" circled.](../fig/02-instances-management/01-aws-cloudshell-actions-menu.png){: width="900px"}
 
